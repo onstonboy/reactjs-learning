@@ -1,12 +1,11 @@
-import type { Ref } from 'react';
 import { Button } from '../ui/Button';
 
 interface AppHeaderProps {
   onBookFlight: () => void;
-  bookButtonRef?: Ref<HTMLButtonElement>;
+  onAddFlight: () => void;
 }
 
-export function AppHeader({ onBookFlight, bookButtonRef }: AppHeaderProps) {
+export function AppHeader({ onBookFlight, onAddFlight }: AppHeaderProps) {
   return (
     <header className="app-header">
       <div className="app-header__inner">
@@ -16,9 +15,12 @@ export function AppHeader({ onBookFlight, bookButtonRef }: AppHeaderProps) {
           </span>
           <span className="app-header__title">Flight Booking Dashboard</span>
         </div>
-        <Button onClick={onBookFlight} ref={bookButtonRef}>
-          Book a flight
-        </Button>
+        <div className="app-header__actions">
+          <Button variant="secondary" onClick={onAddFlight}>
+            Add a flight
+          </Button>
+          <Button onClick={onBookFlight}>Book a flight</Button>
+        </div>
       </div>
     </header>
   );

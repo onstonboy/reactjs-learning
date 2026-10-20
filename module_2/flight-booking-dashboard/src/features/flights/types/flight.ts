@@ -42,3 +42,29 @@ export interface BookingFormValues {
 export type BookingFormErrors = Partial<
   Record<keyof BookingFormValues, string>
 >;
+
+export interface CreateFlightInput {
+  flightNumber: string;
+  airline: string;
+  origin: string;
+  destination: string;
+  departureTime: string;
+  arrivalTime: string;
+  price: number;
+  seatsAvailable: number;
+  status: FlightStatus;
+}
+
+export interface FlightFormValues {
+  flightNumber: string;
+  airline: string;
+  origin: string;
+  destination: string;
+  departureTime: string;
+  arrivalTime: string;
+  price: string;
+  seatsAvailable: string;
+  status: FlightStatus;
+}
+
+export type FlightFormErrors = Partial<Record<keyof FlightFormValues, string>>;

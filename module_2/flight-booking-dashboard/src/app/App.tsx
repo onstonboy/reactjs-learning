@@ -1,5 +1,5 @@
-import { FlightDashboard } from '../features/flights/components/FlightDashboard';
+import { FlightDashboardPage } from '../pages/FlightDashboardPage';
 
 export default function App() {
-  return <FlightDashboard />;
+  return <FlightDashboardPage />;
 }

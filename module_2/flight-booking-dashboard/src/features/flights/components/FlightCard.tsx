@@ -5,16 +5,26 @@ import { formatDateTime, formatPrice } from '../utils/format';
 
 interface FlightCardProps {
   flight: Flight;
+  isSelected: boolean;
+  onSelect: (flight: Flight) => void;
   onBook: (flight: Flight) => void;
 }
 
-export function FlightCard({ flight, onBook }: FlightCardProps) {
+export function FlightCard({
+  flight,
+  isSelected,
+  onSelect,
+  onBook,
+}: FlightCardProps) {
   const isSoldOut = flight.seatsAvailable === 0;
   const isBookable = !isSoldOut && flight.status !== 'Cancelled';
   const isLowSeats = flight.seatsAvailable > 0 && flight.seatsAvailable <= 10;
 
   return (
-    <article className="flight-card">
+    <article
+      className={`flight-card${isSelected ? ' flight-card--selected' : ''}`}
+      aria-current={isSelected ? 'true' : undefined}
+    >
       <div className="flight-card__header">
         <h3 className="flight-card__number">{flight.flightNumber}</h3>
         <StatusBadge status={flight.status} />
@@ -44,6 +54,9 @@ export function FlightCard({ flight, onBook }: FlightCardProps) {
         </span>
       </div>
       <div className="flight-card__actions">
+        <Button variant="ghost" onClick={() => onSelect(flight)}>
+          Details
+        </Button>
         <Button
           variant="secondary"
           disabled={!isBookable}

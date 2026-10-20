@@ -1,7 +1,18 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { ApiState } from '../../../types/api';
-import { createBooking, getFlights } from '../services/flightService';
-import type { Booking, CreateBookingInput, Flight } from '../types/flight';
+import {
+  createBooking,
+  createFlight,
+  getFlights,
+  updateFlightStatus,
+} from '../services/flightService';
+import type {
+  Booking,
+  CreateBookingInput,
+  CreateFlightInput,
+  Flight,
+  FlightStatus,
+} from '../types/flight';
 import { getErrorMessage } from '../utils/errors';
 
 export function useFlights() {
@@ -66,5 +77,47 @@ export function useFlights() {
     [],
   );
 
-  return { flightsState, bookings, loadFlights, bookFlight };
+  const addFlight = useCallback(
+    async (input: CreateFlightInput): Promise<Flight> => {
+      const flight = await createFlight(input);
+
+      setFlightsState((previous) => {
+        if (previous.status !== 'success') return previous;
+        return { status: 'success', data: [flight, ...previous.data] };
+      });
+
+      return flight;
+    },
+    [],
+  );
+
+  const changeFlightStatus = useCallback(
+    async (flightId: string, status: FlightStatus): Promise<Flight> => {
+      const updated = await updateFlightStatus(flightId, status);
+
+      setFlightsState((previous) => {
+        if (previous.status !== 'success') return previous;
+        return {
+          status: 'success',
+          data: previous.data.map((flight) =>
+            flight.id === flightId
+              ? { ...flight, status: updated.status }
+              : flight,
+          ),
+        };
+      });
+
+      return updated;
+    },
+    [],
+  );
+
+  return {
+    flightsState,
+    bookings,
+    loadFlights,
+    bookFlight,
+    addFlight,
+    changeFlightStatus,
+  };
 }
